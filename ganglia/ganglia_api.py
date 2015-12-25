@@ -30,9 +30,9 @@ from tornado.options import define, options
 
 __version__ = '1.0.16'
 
-define("port", default=8080, help="run on the given port", type=int)
+define("port", default=API_SERVER.split(':')[-1], help="run on the given port", type=int)
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s[%(process)d] %(levelname)s - %(message)s",
+logging.basicConfig(level=logging.ERROR, format="%(asctime)s %(name)s[%(process)d] %(levelname)s - %(message)s",
                     filename=LOGFILE)
 global logger
 logger = logging.getLogger("ganglia-api")
@@ -314,10 +314,10 @@ class GangliaConfig:
     def parse_ganglia_config(self):
         logger.info("Parsing ganglia configurations")
         result = dict()
-        for file in glob.glob(os.path.join(GangliaConfig.GANGLIA_PATH, 'gmetad-*-*.conf')):
-            m = re.search('gmetad-(\S+)-(\S+).conf', file)
-            environment = m.group(1)
-            service = m.group(2)
+        for file in glob.glob(os.path.join(GangliaConfig.GANGLIA_PATH, 'gmetad.conf')):
+            #m = re.search('gmetad-(\S+)-(\S+).conf', file)
+            environment = "default"
+            service = "default"
 
             xml_port = 0
             interactive_port = 0
